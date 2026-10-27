@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>html{scroll-behavior:smooth}body{margin:0;background:#fff;font-family:Geist,system-ui,sans-serif;color:#0f172a;-webkit-font-smoothing:antialiased}a{color:#1859f1;text-decoration:none}a:hover{color:#1240c4}b{font-weight:600;color:#0f172a}input::placeholder{color:#94a3b8}</style>
+</helmet>
+<header style="position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid #e2e8f0">
+<div style="max-width:1320px;margin:0 auto;height:64px;padding:0 28px;box-sizing:border-box;display:flex;align-items:center;gap:20px">
+<a href="#top" style="display:flex;align-items:center;gap:10px;color:#0f172a;flex:none">
+<span style="width:32px;height:32px;border-radius:9px;background:#1859f1;color:#fff;display:flex;align-items:center;justify-content:center;font:600 11px Geist Mono,monospace">DB</span>
+<span style="font-size:16px;font-weight:600">Drop-Bury reports</span>
+</a>
+<span style="flex:none;padding:3px 10px;border-radius:999px;background:#eef3ff;color:#1859f1;font-size:13px;font-weight:500">Docs</span>
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><button onClick="{{ toggleMenu }}" style="margin-left:auto;height:36px;padding:0 12px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font:500 14px Geist,sans-serif;color:#0f172a;cursor:pointer">{{ ui.menu }}</button></sc-if>
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;display:flex;justify-content:center">
+<label style="width:100%;max-width:420px;height:38px;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;box-sizing:border-box">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+<input value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ ui.search }}" style="flex:1;border:0;outline:0;background:transparent;font:400 14px Geist,sans-serif;color:#0f172a;min-width:0">
+</label>
+</div>
+</sc-if>
+<div style="flex:none;display:flex;align-items:center;gap:2px;padding:3px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc">
+<button onClick="{{ setEn }}" style="{{ enStyle }}">EN</button>
+<button onClick="{{ setEs }}" style="{{ esStyle }}">ES</button>
+</div>
+</div>
+</header>
+
+<section id="top" data-screen-label="Hero" style="margin-top:64px;background:linear-gradient(180deg,#f5f8ff,#fff);border-bottom:1px solid #eef2f7">
+<div style="max-width:1320px;margin:0 auto;padding:56px 28px 44px;box-sizing:border-box;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap">
+<span style="flex:none;width:60px;height:60px;border-radius:16px;background:#fff;border:1px solid #dbe6fe;color:#1859f1;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(15,23,42,.05)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>
+<div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;font-weight:500">{{ ui.eyebrow }}</div>
+<h1 style="margin:0;font-size:40px;line-height:1.1;font-weight:600;letter-spacing:-.025em">{{ ui.title }}</h1>
+<p style="margin:0;max-width:720px;font-size:17px;color:#475569;line-height:1.55;text-wrap:pretty">{{ ui.subtitle }}</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+<span style="padding:4px 11px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;font-size:13px;color:#334155">Oct 27, 2026</span>
+<span style="padding:4px 11px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;font-size:13px;color:#334155">@Saúl Castillo</span>
+<span style="padding:4px 11px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;font-size:13px;color:#334155">{{ ui.count }}</span>
+</div>
+</div>
+</div>
+</section>
+
+<div style="max-width:1320px;margin:0 auto;padding:0 28px;box-sizing:border-box;display:flex;gap:56px;align-items:flex-start">
+<sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+<nav style="{{ navStyle }}">
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><input value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ ui.search }}" style="height:38px;padding:0 12px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;font:400 14px Geist,sans-serif;outline:0;margin-bottom:8px"></sc-if>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;gap:8px;padding:0 10px 6px;font-size:14px;font-weight:600;color:#0f172a"><span style="{{ g.dot }}"></span>{{ g.title }}</div>
+<sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+<a href="{{ it.href }}" onClick="{{ it.onClick }}" style="{{ it.style }}"><span style="flex:1">{{ it.label }}</span><span style="font:400 11px Geist Mono,monospace;color:#94a3b8">{{ it.num }}</span></a>
+</sc-for>
+</div>
+</sc-for>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 10px;font-size:14px;color:#64748b">{{ ui.none }}</div></sc-if>
+</nav>
+</sc-if>
+
+<main style="flex:1;min-width:0;max-width:860px;padding:40px 0 120px;display:flex;flex-direction:column">
+<sc-for list="{{ sections }}" as="sec" hint-placeholder-count="3">
+<section id="{{ sec.id }}" data-screen-label="{{ sec.label }}" style="scroll-margin-top:84px;padding:36px 0 40px;border-bottom:1px solid #eef2f7;display:flex;flex-direction:column;gap:16px;color:#334155">
+<div style="display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#64748b;font-weight:500"><span style="font-family:Geist Mono,monospace;color:#1859f1">{{ sec.num }}</span><span>{{ sec.group }}</span></div>
+<h2 style="margin:0 0 4px;font-size:30px;line-height:1.2;font-weight:600;color:#0f172a;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline">{{ sec.title }}<a href="{{ sec.href }}" style="font-size:24px;color:#1859f1;opacity:.55" style-hover="opacity:1">#</a></h2>
+<sc-for list="{{ sec.blocks }}" as="b" hint-placeholder-count="4">
+
+<sc-if value="{{ b.isP }}"><p style="margin:0;font-size:16px;line-height:1.7;text-wrap:pretty"><sc-for list="{{ b.segs }}" as="s"><sc-if value="{{ s.b }}"><b>{{ s.t }}</b></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></p></sc-if>
+
+<sc-if value="{{ b.isH }}"><h3 id="{{ b.anchor }}" style="margin:18px 0 0;font-size:20px;font-weight:600;color:#0f172a;letter-spacing:-.01em;scroll-margin-top:84px">{{ b.text }}</h3></sc-if>
+
+<sc-if value="{{ b.isOl }}"><ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.6"><sc-for list="{{ b.items }}" as="li"><li style="display:flex;gap:12px"><span style="flex:none;width:26px;height:26px;border-radius:999px;background:#eef3ff;color:#1859f1;font:600 12px/26px Geist Mono,monospace;text-align:center">{{ li.n }}</span><span style="padding-top:1px"><sc-for list="{{ li.segs }}" as="s"><sc-if value="{{ s.b }}"><b>{{ s.t }}</b></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></span></li></sc-for></ol></sc-if>
+
+<sc-if value="{{ b.isUl }}"><ul style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.6"><sc-for list="{{ b.items }}" as="li"><li><sc-for list="{{ li.segs }}" as="s"><sc-if value="{{ s.b }}"><b>{{ s.t }}</b></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></li></sc-for></ul></sc-if>
+
+<sc-if value="{{ b.isT }}"><div style="border:1px solid #e2e8f0;border-radius:12px;overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:14px;line-height:1.5">
+<thead><tr><sc-for list="{{ b.head }}" as="h"><th style="text-align:left;padding:10px 16px;background:#f8fafc;color:#64748b;font-weight:500;border-bottom:1px solid #e2e8f0;white-space:nowrap">{{ h }}</th></sc-for></tr></thead>
+<tbody><sc-for list="{{ b.rows }}" as="r"><tr><sc-for list="{{ r.cells }}" as="c"><td style="padding:12px 16px;border-top:1px solid #f1f5f9;vertical-align:top"><sc-if value="{{ c.isBadge }}"><span style="{{ c.badge }}">{{ c.t }}</span></sc-if><sc-if value="{{ c.isFirst }}"><b>{{ c.t }}</b></sc-if><sc-if value="{{ c.isText }}"><sc-for list="{{ c.segs }}" as="s"><sc-if value="{{ s.b }}"><b>{{ s.t }}</b></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></sc-if></td></sc-for></tr></sc-for></tbody>
+</table></div></sc-if>
+
+<sc-if value="{{ b.isNote }}"><div style="display:flex;gap:12px;padding:14px 18px;border-radius:12px;background:#eff5ff;border:1px solid #dbe6fe;color:#1e3a8a;font-size:15px;line-height:1.6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" style="flex:none;margin-top:3px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg><span><sc-for list="{{ b.segs }}" as="s"><sc-if value="{{ s.b }}"><strong>{{ s.t }}</strong></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></span></div></sc-if>
+
+<sc-if value="{{ b.isWarn }}"><div style="display:flex;gap:12px;padding:14px 18px;border-radius:12px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:15px;line-height:1.6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4M12 17h.01"></path></svg><span><sc-for list="{{ b.segs }}" as="s"><sc-if value="{{ s.b }}"><strong>{{ s.t }}</strong></sc-if><sc-if value="{{ s.l }}"><a href="{{ s.href }}">{{ s.t }}</a></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></span></div></sc-if>
+
+<sc-if value="{{ b.isImg }}"><sc-if value="{{ shots }}" hint-placeholder-val="{{ true }}"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:4px 0"><sc-for list="{{ b.imgs }}" as="im"><figure style="margin:0;display:flex;flex-direction:column;gap:8px"><img src="{{ im.src }}" alt="{{ im.cap }}" onClick="{{ openImg }}" style="{{ im.style }}"><figcaption style="font-size:13px;color:#64748b">{{ im.cap }}</figcaption></figure></sc-for></div></sc-if></sc-if>
+
+<sc-if value="{{ b.isCards }}"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px"><sc-for list="{{ b.cards }}" as="cd"><a href="{{ cd.href }}" style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:6px;color:#334155" style-hover="border-color:#b9cdfd;background:#f8fbff"><span style="font:600 12px Geist Mono,monospace;color:#1859f1">{{ cd.k }}</span><span style="font-size:15px;font-weight:600;color:#0f172a">{{ cd.title }}</span><span style="font-size:14px;line-height:1.5"><sc-for list="{{ cd.segs }}" as="s"><sc-if value="{{ s.b }}"><b>{{ s.t }}</b></sc-if><sc-if value="{{ s.l }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.n }}"><span>{{ s.t }}</span></sc-if></sc-for></span></a></sc-for></div></sc-if>
+
+<sc-if value="{{ b.isChips }}"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ b.chips }}" as="ch"><span style="padding:4px 10px;border-radius:6px;background:#f1f5f9;color:#0f172a;font-size:13px">{{ ch }}</span></sc-for></div></sc-if>
+
+<sc-if value="{{ b.isCode }}"><div style="padding:14px 18px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font:400 14px Geist Mono,monospace;color:#0f172a;overflow:auto">{{ b.text }}</div></sc-if>
+
+<sc-if value="{{ b.isPerms }}"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px"><sc-for list="{{ b.groups }}" as="pg"><div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden"><div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0"><span style="font-size:14px;font-weight:600;color:#0f172a">{{ pg.name }}</span><span style="font:500 12px Geist Mono,monospace;color:#64748b;padding:1px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff">{{ pg.count }}</span></div><div style="padding:12px 14px;display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ pg.perms }}" as="p"><span style="font-size:13px;padding:2px 8px;border-radius:6px;background:#f1f5f9;color:#334155">{{ p }}</span></sc-for></div></div></sc-for></div></sc-if>
+
+<sc-if value="{{ b.isFaq }}"><div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ b.faqs }}" as="f"><div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden"><button onClick="{{ f.toggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#fff;border:0;cursor:pointer;text-align:left;font:500 15px Geist,system-ui,sans-serif;color:#0f172a" style-hover="background:#f8fafc"><span>{{ f.q }}</span><span style="font:400 18px Geist Mono,monospace;color:#64748b">{{ f.sign }}</span></button><sc-if value="{{ f.open }}"><div style="padding:0 16px 14px;font-size:15px;line-height:1.6;color:#334155">{{ f.a }}</div></sc-if></div></sc-for></div></sc-if>
+
+</sc-for>
+</section>
+</sc-for>
+<footer style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;color:#64748b;padding:28px 0 0"><span>{{ ui.title }} · Drop-Bury Reports</span><a href="#top">{{ ui.top }}</a></footer>
+</main>
+</div>
+
+<sc-if value="{{ hasLightbox }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeImg }}" style="position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.72);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:40px 24px;cursor:zoom-out">
+<img src="{{ lightbox }}" alt="" style="max-width:min(1400px,100%);border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.35);background:#fff">
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const IMG = 'uploads/';
+const UI = {
+  en: { eyebrow: 'Documentation', title: 'User manual', subtitle: 'How to submit, review, approve, and manage field cabling job reports in Drop-Bury Reports.', count: '17 sections', search: 'Search docs…', menu: 'Menu', none: 'No sections match.', top: 'Back to top', groups: ['Getting started', 'Reviewers', 'Administrators', 'Technicians & crews', 'Reference'] },
+  es: { eyebrow: 'Documentación', title: 'Manual de usuario', subtitle: 'Cómo enviar, revisar, aprobar y administrar los reportes de trabajos de cableado en campo en Drop-Bury Reports.', count: '17 secciones', search: 'Buscar en la guía…', menu: 'Menú', none: 'Ninguna sección coincide.', top: 'Volver arriba', groups: ['Primeros pasos', 'Reviewers', 'Administradores', 'Técnicos y crews', 'Referencia'] }
+};
+const GROUP_COLORS = ['#1859f1', '#16a34a', '#7c3aed', '#ea580c', '#64748b'];
+const PERMS = [
+  ['Dashboard', ['View Dashboard', 'Export Metrics PDF']],
+  ['Metrics', ['View Metrics']],
+  ['Reports', ['View Reports', 'View Report Details', 'Review Report', 'Edit Report', 'Edit Crew Email In Report', 'Export Single Report (PDF)', 'Submit Report', 'Change Status', 'Bypass Photo Duplicate Check', 'View Pending Reports', 'View Accepted Reports', 'View Rejected Reports', 'View Archived Reports']],
+  ['Users', ['View Users', 'Create Users', 'Edit Users', 'Delete Users']],
+  ['Settings', ['View Settings', 'View General Settings', 'Edit General Settings', 'Create Catalogs', 'Edit Catalogs', 'Delete Catalogs', 'View Form Builder', 'Create Form Builder', 'Edit Form Builder']],
+  ['Roles', ['View Roles', 'Create Roles', 'Edit Roles', 'Delete Roles']],
+  ['Crews', ['View Crews', 'Create Crew', 'Edit Crew', 'Delete Crew']]
+];
+const DROP_TYPES = ['Bury', 'Bore', 'Trip', 'Pipe Pull ONLY', 'Road Bore ONLY', 'White Line', 'Core Bore', 'Pre-Field Only', 'TEMP', 'Aerial'];
+
+// [group index, title, blocks]
+const EN = [
+ [0, 'Introduction', [
+  ['p', 'Drop-Bury Reports is a web platform to record, review, and approve reports for cabling jobs (drop, bury, bore, aerial, and others) performed by field technicians. Each report gathers the job data and the photo evidence that proves the work was done correctly.'],
+  ['h', 'The report lifecycle'],
+  ['cards', [['01', 'Submit', 'The technician fills out the **Drop-Bury Field Report** from the crew link and clicks **Submit report**.'], ['02', 'Queue', 'The report lands in **Reports** with status **Pending Review**.'], ['03', 'Review', 'A reviewer checks data and photos, fixes what they can, and chooses **Accept**, **Reject**, or **Skip**.'], ['04', 'Kickback', 'If rejected, the technician and crew get a kickback email with an edit link (expires in 7 days by default).'], ['05', 'Metrics', 'Accepted reports stay available for audit and feed the **Dashboard**.']]],
+  ['h', 'How to use this manual'],
+  ['cards', [['2–4', 'Everyone', 'Roles, sign-in, and navigation.', '#s2'], ['5–7', 'Reviewers', 'Reviewing and deciding on reports.', '#s5'], ['8–14', 'Administrators', 'Dashboard, settings, forms, users, roles.', '#s8'], ['15–16', 'Technicians & crews', 'Submitting and correcting reports.', '#s15']]],
+  ['note', 'What you see and can do depends on your role permissions. If you can’t find an option described here, your role doesn’t have that permission.']
+ ]],
+ [0, 'Platform roles', [
+  ['p', 'The platform ships with five system roles (tagged **System** in Settings → Roles). Administrators can create additional roles with custom permissions (see [section 14](#s14)).'],
+  ['t', ['Role', 'What it does', 'How it’s assigned'], [
+   ['Admin', 'Full management: dashboard, reports, users, crews, forms, and settings. Cannot delete roles or reports.', 'From Users.'],
+   ['Reviewer', 'Views, reviews, and edits report details (fields and photos) during review. Accepts or rejects.', 'From Users.'],
+   ['Auditor', 'Read-only access to reports and metrics. Changes nothing.', 'From Users.'],
+   ['Field Technician', 'Submits reports from the field and views their own submissions. Signs in to the mobile app.', 'From Users, with their crew.'],
+   ['Crew', 'Crew-portal access, limited to that crew’s reports. Can correct rejected reports.', 'Created automatically when a crew is registered in Settings → Crews. Not editable.']]],
+  ['note', 'The dashboard, metrics, manual status changes (Change Status), and report archiving belong to admin profiles, not reviewers.']
+ ]],
+ [0, 'Signing in', [
+  ['p', 'Drop-Bury Reports doesn’t use passwords: you sign in with a one-time code (**OTP**) sent to your email that expires after **10 minutes**.'],
+  ['h', 'To sign in'],
+  ['ol', ['Open the platform URL in your browser.', 'Enter the email registered to your account.', 'Click **Continue**.', 'Open your inbox and look for the email with the code. Also check spam or promotions.', 'Return to the platform, enter the code, and confirm.', 'You’ll land on the view for your role. Your name appears at the bottom left of the side menu.']],
+  ['h', 'If the code doesn’t work'],
+  ['ul', ['**Expired code.** After 10 minutes the code is rejected even if it’s correct. Enter your email again to get a new one.', '**Wrong code.** The platform shows an error and won’t let you continue. Make sure you copied every character.', '**No email.** Confirm your address is spelled correctly and that an administrator created your account. If your user was disabled (Disable), you won’t receive codes.']],
+  ['p', '**Sign out:** click your name at the bottom left and choose the option to log out.'],
+  ['note', 'Request a code only when you’re ready to use it, and always use the most recent one.']
+ ]],
+ [0, 'Navigating the app', [
+  ['p', 'Everything is handled from the left side menu (**Navigation**). You only see the options your role allows.'],
+  ['t', ['Menu', 'What it’s for'], [
+   ['Dashboard', 'Operational KPIs and charts (Overview) and reviewer performance (Reviewer performance).'],
+   ['Reports', 'Inbox of submitted reports. The number next to it shows how many need attention.'],
+   ['Settings → General', 'Platform name, notifications, link expiry, and kickback reminders.'],
+   ['Settings → Form Builder', 'Form fields, drop type rules, and published versions.'],
+   ['Settings → Users', 'People with platform access and their role.'],
+   ['Settings → Crews', 'Companies or crews, their states, and their public link.'],
+   ['Settings → Roles', 'Roles and permissions.'],
+   ['Settings → Catalogs', 'Lookup lists used by the system (states, statuses, permissions).']]],
+  ['h', 'Common elements'],
+  ['ul', ['**Hide menu:** the icon next to the platform name, top left, collapses or expands the side menu.', '**Your account:** your name appears at the bottom left.', '**Tables:** most have search, filters, **Clear filters** to remove them, **Rows per page**, and pagination arrows at the bottom right.', '**Sorting:** columns with arrows (↑↓) next to the title can be sorted by clicking them.']],
+  ['note', 'Use an up-to-date version of Chrome, Edge, Firefox, or Safari on a desktop or laptop. Photo review tools are designed for mouse or trackpad.']
+ ]],
+ [1, 'Reports view', [
+  ['p', 'The **Reports** view (“All field submissions”) is your work inbox: it lists every submitted report, newest first.'],
+  ['img', [['05-01-reports-lista.png', 'Reports view with filters and submissions table.']]],
+  ['h', 'Table columns'],
+  ['t', ['Column', 'What it shows'], [['Company', 'Crew the report belongs to. Sortable.'], ['Email', 'Email of the technician or crew that submitted the report.'], ['Call Id', 'Customer job or ticket identifier.'], ['Drop Type', 'Type of job (Bury, Bore, White Line…). Sortable.'], ['Submitted', 'Submission date. Sortable.'], ['Status', 'Current report status.'], ['Reviews', 'Number of recorded reviews. At 0, nobody has reviewed it.']]],
+  ['h', 'Find a report'],
+  ['ol', ['Click the search box (“Search company, email, Call Id…”).', 'Type the Call ID, email, or company name.', 'The table shows only matching results.']],
+  ['h', 'Filter the list'],
+  ['p', 'Combine the filters in the top bar and use **Clear filters** to return to the full list.'],
+  ['t', ['Filter', 'Options'], [['Date range', 'Submission period; pick a range on the calendar and click Apply.'], ['All statuses', 'Pending Review, Accepted, Rejected, Archived.'], ['All drop types', 'Any configured job type.'], ['All states', 'US state of the job address.'], ['All crews', 'A specific crew.']]],
+  ['h', 'Report statuses'],
+  ['t', ['Status', 'Meaning', 'What’s next'], [['§Pending Review', 'Submitted, awaiting review.', 'A reviewer must open it and decide.'], ['§Accepted', 'The reviewer verified the work is correct.', 'Available for audit and metrics.'], ['§Rejected', 'Has errors the technician or crew must fix.', 'A kickback is sent; the report waits for the correction.'], ['§Archived', 'Removed from operations (e.g., a duplicate).', 'Not counted in metrics; only visible when filtered or exported.']]],
+  ['p', 'To open a report, click anywhere on its row.']
+ ]],
+ [1, 'Reviewing a report', [
+  ['p', 'Reviewing means opening the report, checking that every field and photo matches the job, fixing what you can, and deciding whether to accept or reject.'],
+  ['h', '6.1 The report panel'],
+  ['p', 'Clicking a row opens a side panel with these parts:'],
+  ['img', [['06-01-reporte-panel.png', 'Report panel.', 300], ['06-02-reporte-contenido-completo.png', 'Full content: details, photos, and history.', 300]]],
+  ['t', ['Area', 'Content'], [['Top bar', 'Previous and Next to move between reports without closing the panel, plus the list position (e.g., “5 of 15”).'], ['Header', 'Report code (e.g., #41F12CFA), status, crew, email, and submission date/time. On the right: Export Report, Change Status (depending on permissions and status), and the archive icon (Archive report).'], ['Report Details', 'Form data: Date, Company Name, Call ID, Technician’s e-mail, Address, Drop Type, and drop-type-specific fields (e.g., Total cable length and Notes | Comments). An asterisk (*) marks required fields.'], ['Photo Evidence', 'Photos grouped by field, with the total (e.g., “10 photos”).'], ['Review History', 'Log of every action on the report.'], ['Bottom bar', 'Skip, Accept, and Reject. Only shown on reports pending review.']]],
+  ['h', '6.2 Correct a field'],
+  ['p', 'If the technician entered a wrong value (for example, a wrongly selected date):'],
+  ['ol', ['Click the pencil icon next to the field name.', 'Type or select the correct value.', 'Confirm the change. It’s logged in the Review History.']],
+  ['h', '6.3 Photo tools'],
+  ['p', 'Each photo appears in a card with its field name below and these controls:'],
+  ['t', ['Control', 'Location', 'What it does'], [['View photo', 'Click the image', 'Opens the photo large, with zoom and navigation between images.'], ['Move (⇆)', 'Top-left corner', 'Moves the photo to another field (Move photo to another field).'], ['Comments', 'Top-right corner', 'Leaves a note on that photo. A colored dot means it already has comments.'], ['Delete', 'Bottom-right corner (red icon)', 'Removes the photo from the field.'], ['AI result', 'Below the photo', 'Automatic validation result; expand it to see details.'], ['Add photo', 'Dashed area', 'Adds a photo to an empty field.'], ['Select photos to move', 'Top right of Photo Evidence', 'Select several photos and move them to another field together.']]],
+  ['img', [['06-03-visor-de-fotos.png', 'Photo viewer with comments.'], ['06-04-visor-resultado-ia.png', 'AI result expanded.']]],
+  ['p', '**AI messages:**'],
+  ['ul', ['**AI: Issues found** — the AI detected problems; expand the message to see them.', '**AI: agent not available when uploading the photo** — validation didn’t run; check the photo manually.', '**No error message** — the photo passed validation or the field has no AI validation.']],
+  ['note', '**Example:** if the vehicle photo ended up in the door hanger field, use Move to put it in the right field. No need to reject for a placement error you can fix yourself.'],
+  ['h', '6.4 What to check in photos'],
+  ['p', 'Common reasons for rejection:'],
+  ['ul', ['The photo wasn’t taken where the guideline says (e.g., from the vehicle instead of in front of the house).', 'A required element is missing: the address tag on the cable, the tape measure inside the trench, the technician badge, the cones.', 'The photo is blurry, dark, or cropped, and what should be readable isn’t.', 'The photo looks edited or staged, or was reused from another job.']],
+  ['warn', 'Almost every photo shows as “modified” in its metadata because technicians use apps that overlay date and time. That flag alone is not a reason to reject.'],
+  ['h', '6.5 Review History'],
+  ['p', 'Every action on a report (edited fields, moved photos, acceptances, rejections, kickbacks) is logged with its author and date. The history can’t be deleted, so avoid test changes on real reports.']
+ ]],
+ [1, 'Accept, reject, skip & archive', [
+  ['p', 'When you finish reviewing, use the buttons in the panel’s bottom bar: **Accept** if everything is correct (or you already fixed it), **Reject** if there are errors only the technician can resolve, or **Skip** to leave it pending and move to the next one.'],
+  ['h', '7.1 Accept a report'],
+  ['ol', ['Confirm all required fields and photos are correct.', 'Click **Accept** (green button).', 'The status changes to Accepted.']],
+  ['h', '7.2 Reject a report (kickback)'],
+  ['p', 'Reject when evidence is missing or a photo must be retaken, for example if the technician needs to go back to the site.'],
+  ['ol', ['Leave a comment on each problem photo using the card’s comments icon.', 'Click **Reject** (red button).', 'Enter the reason and the fields that need correction, then confirm.', 'The platform sends the kickback email to the technician and their crew (or only to the crew, if **Restrict emails to crew only** is on).']],
+  ['p', 'The email includes the Call ID, drop type, submission date, status, your comment, flagged fields, submitted photos, and a button to edit the report. The link expires per **Edit Link Expiry** (7 days by default).'],
+  ['note', 'Write specific comments: “Tape measure missing inside the trench in Buried Depth” works better than “wrong photos”.'],
+  ['h', '7.3 Skip'],
+  ['p', '**Skip** leaves the report in Pending Review and takes you to the next one. Use it if you need to check something before deciding.'],
+  ['h', '7.4 Archive a report'],
+  ['p', 'Archiving removes a report from operations and metrics without deleting it; use it for duplicates, for example.'],
+  ['ol', ['Open the report.', 'Click the archive icon (**Archive report**) at the top right.', 'Confirm. The status changes to Archived.']],
+  ['h', '7.5 Change status manually'],
+  ['p', '**Change Status** moves a report to another status outside the normal review flow (for example, sending a rejected report back to review). Only roles with the Change Status permission see it.'],
+  ['img', [['07-02-reporte-rechazado-change-status.png', 'Rejected report with the Change Status button.']]],
+  ['h', '7.6 Download a report'],
+  ['p', '**Export Report** downloads the open report as a PDF with its data and photos. Requires the Export Single Report (PDF) permission.']
+ ]],
+ [2, 'Dashboard & metrics', [
+  ['p', 'The Dashboard shows report volume, quality, and status. It has two tabs: **Overview** and **Reviewer performance**. Requires the View Dashboard and View Metrics permissions.'],
+  ['img', [['08-01-dashboard-overview.png', 'Dashboard, Overview tab.']]],
+  ['h', '8.1 Filters'],
+  ['p', 'The filters at the top affect every KPI and chart on the tab:'],
+  ['ol', ['Click the date filter (**Last 7 days** by default).', 'Choose Last 7 days, Last 30 days, or select a range on the calendar.', 'Click **Apply**.', 'If needed, filter by crew (All crews) and state (All states).', 'Use **Clear filters** to restore the defaults.']],
+  ['img', [['08-03-dashboard-filtro-fechas.png', 'Date range picker.']]],
+  ['h', '8.2 Overview'],
+  ['p', '**Needs attention** — three work queues; **View queue** opens the matching report list:'],
+  ['t', ['Card', 'What it counts'], [['Pending Review', 'Reports in the review queue.'], ['Rejected (Awaiting Edit)', 'Rejected reports the crew still needs to resubmit.'], ['Accepted Today', 'Reports accepted since midnight.']]],
+  ['p', '**Period snapshot** — totals for the filtered period:'],
+  ['t', ['KPI', 'What it measures'], [['Total submissions', 'Reports submitted in the period.'], ['Total accepted', 'Accepted reports and their percentage.'], ['Rejection rate', 'Percentage of rejected reports.'], ['Acceptance rate', 'Percentage of accepted reports.'], ['Awaiting edit', 'Rejected reports pending correction.'], ['Avg review lag', 'Average days between submission and first review.'], ['Archived', 'Archived reports.']]],
+  ['p', '**Activity and quality** — charts for the period:'],
+  ['ul', ['**Reports Over Time:** daily submissions vs. accepted.', '**Top Failing Fields:** the fields flagged most often in rejections.', '**Review Effort (Iterations):** how many review cycles a report needs before acceptance.', '**Avg Days to Submit by Crew:** average days each crew takes to submit.', '**Submitted by State** and **Rejections by State:** volume and rejections by address state.']],
+  ['img', [['08-02-dashboard-overview-completo.png', 'Full Overview.', 420]]],
+  ['h', '8.3 Reviewer performance'],
+  ['p', 'Shows how each reviewer moves reports. Besides the filters above, it has **All reviewers** and a grouping selector (e.g., **By week**).'],
+  ['ul', ['**KPIs:** Total actions, Reports touched, Active / total reviewers, and Avg actions / report.', '**Per-reviewer table:** Accepted, Rejected, Edited, Total, and Reports.', '**Actions by crew:** review actions per crew.', '**Trend:** acceptances (A), rejections (R), and edits (E) over time.']],
+  ['img', [['08-04-dashboard-reviewer-performance.png', 'Reviewer performance.'], ['08-05-dashboard-reviewer-performance-completo.png', 'Table, actions by crew, and trend.']]],
+  ['note', 'Archived reports are not counted in operational metrics.']
+ ]],
+ [2, 'Exporting data', [
+  ['p', 'The **Export** button at the top right of the Dashboard downloads the reports (Tickets) for the active period and filters in three formats.'],
+  ['t', ['Option', 'Contents', 'Recommended use'], [['Export CSV', 'Report data as comma-separated text.', 'Importing into other systems or your own analysis.'], ['Export Excel', 'Report data as .xlsx, with a **Pre-edit link** per report: a special edit link, different from the technician’s.', 'Admin work and correction follow-up.'], ['Export as PDF', 'The dashboard KPIs and charts.', 'Presenting results or sharing a summary. Requires Export Metrics PDF.']]],
+  ['h', 'To export'],
+  ['ol', ['In Dashboard, apply the filters you want reflected (period, crew, state).', 'Click **Export**.', 'Choose Export CSV, Export Excel, or Export as PDF.', 'If prompted, choose whether to include archived reports.', 'The file downloads to your computer.']],
+  ['img', [['09-01-dashboard-menu-export.png', 'Export menu.']]],
+  ['p', 'To download a single report, open it and use **Export Report** (see [7.6](#s7)).'],
+  ['warn', 'The Pre-edit link allows editing reports. Share it only with authorized people.']
+ ]],
+ [2, 'General settings', [
+  ['p', '**Settings → General** defines the platform name, notifications, edit link expiry, and kickback reminders. Changes apply when you click **Save** at the top right.'],
+  ['img', [['10-02-settings-general-completo.png', 'Settings → General.']]],
+  ['t', ['Option', 'What it controls'], [['Platform Name', 'Name shown in the interface, emails, and the public form header.'], ['Review Timeline Message', 'Confirmation email message stating when the report will be reviewed (e.g., “Your report will be reviewed within 1-2 business days.”).'], ['Notification Recipients', 'Emails notified every time a new report is submitted.'], ['Edit Link Expiry (days)', 'Days a rejected report’s edit link stays active. Default: 7.'], ['Kickback Reminder Schedule', 'Weekday, time, and timezone of the automatic reminder. Default: Friday 8:00 a.m. (UTC).'], ['Send kickbacks manually', 'Sends the reminder immediately. Asks for confirmation first.']]],
+  ['h', 'Change an option'],
+  ['ol', ['Go to Settings → General.', 'Edit the field.', 'Click **Save**.']],
+  ['h', 'Send the kickback reminder now'],
+  ['ol', ['Go to the **Send kickbacks manually** section.', 'Click the send button.', 'Confirm. The email goes to every technician with rejected reports whose edit link is still active.']],
+  ['note', 'Reminders, automatic or manual, are only sent for rejected reports with an active edit link. The default timezone is UTC: adjust it to match your crews’ local time.']
+ ]],
+ [2, 'Form Builder', [
+  ['p', 'The Form Builder defines the form technicians fill out (“Drop-Bury Field Report”). Changes don’t reach the public form until you publish a new version with **Publish version**.'],
+  ['img', [['11-01-form-builder-campos.png', 'Form Builder, Fields tab.']]],
+  ['h', '11.1 The screen'],
+  ['t', ['Element', 'What it’s for'], [['Form name', 'Form title technicians see.'], ['Counter & version', 'Number of fields and published version (e.g., “29 fields · Live · v34”).'], ['Preview', 'Shows the form as the technician will see it.'], ['Publish version', 'Publishes changes as a new version.'], ['Tabs', 'Fields, Drop type rules (rules per job type), and Extra rules (conditional rules).'], ['Version history', 'List of versions on the right. The current one is tagged **Live**; older ones **Archived**, kept on file.']]],
+  ['h', '11.2 Add a field'],
+  ['ol', ['In the Fields tab, go to **Add a field**.', 'Click the type: Text, Email, Date, Number, Long text, Dropdown, Photo, or Address.', 'The field is added to the list. Click its card to open the settings.', 'Fill in the details (see 11.3 and 11.4).', 'To reorder, drag the card by the dot handle left of the number.', 'When the form is ready, check it with **Preview** and click **Publish version**.']],
+  ['p', 'Each card shows tags for its type, **Required** if mandatory, and **AI** if it has AI validation.'],
+  ['h', '11.3 Settings for any field'],
+  ['t', ['Section', 'Option', 'What it defines'], [['Details', 'Label', 'Field name the technician sees.'], ['Details', 'Type', 'Field type.'], ['Details', 'Width', 'Width on the form (e.g., Full row).'], ['Details', 'Placeholder', 'Example text inside the empty field.'], ['Details', 'Helper text', 'Short hint shown with the field.'], ['Behavior', 'Required', 'The crew must complete the field to submit.'], ['Behavior', 'Visible', 'The field is shown on the public form.'], ['Behavior', 'Always visible', 'The field is always shown, even if a drop type rule hides it.'], ['Behavior', 'AI validation', 'The photo is checked against a prompt (Photo fields only).']]],
+  ['p', 'To delete a field, open its card and click **Remove field**.'],
+  ['h', '11.4 Photo field settings'],
+  ['p', 'Photo fields also have a **Photos** section:'],
+  ['t', ['Option', 'What it defines'], [['Max photos', 'Maximum number of images for the field.'], ['Accepted formats', 'JPG, PNG, WEBP, GIF, and HEIC. Leave all selected to accept them all.'], ['Photo guidelines', 'Instructions for the technician: what must appear and how to take the photo.'], ['Reference photo', 'Example photo shown when a photo fails AI validation. Remove reference removes it.'], ['AI validation prompt', 'What the AI must check in the photo and when to reject it.']]],
+  ['img', [['11-02-form-builder-configuracion-campo-foto.png', 'Address Tag field settings.']]],
+  ['p', '**Example (Address Tag):** the prompt asks to identify an address tag attached to the cable, with enough light and sharp focus, and to reject the photo if the tag is missing, blurry, or not connected to the cable.'],
+  ['note', 'Write the Photo guidelines and the AI validation prompt with the same criteria. When technicians know what the AI checks, there are fewer rejections.']
+ ]],
+ [2, 'Drop type & extra rules', [
+  ['p', 'A **drop type** is the type of job the technician performed. All crews use the same form; what changes by drop type is which fields are shown and which are required.'],
+  ['p', 'Drop types configured in staging:'],
+  ['chips', DROP_TYPES],
+  ['h', '12.1 Configure a drop type'],
+  ['ol', ['Go to Settings → Form Builder and open the **Drop type rules** tab.', 'Each drop type shows a summary, e.g., “6 hidden · 2 extra required”: hidden fields and fields that become required only for that type.', 'Click the drop type to expand its fields.', 'For each field, toggle **Visible** and **Required**.', 'Check the result with **Preview**, choosing that drop type on the form.', 'Click **Publish version** to apply the changes.']],
+  ['img', [['12-01-drop-type-rules.png', 'Drop type list.', 320], ['12-02-drop-type-rules-bury-completo.png', 'Bury drop type rules.', 320]]],
+  ['note', 'A field set to Always visible in its settings is shown even if the drop type rule hides it.'],
+  ['h', '12.2 Extra rules'],
+  ['p', 'The **Extra rules** tab creates conditional rules: hide or require a field when another answer has a specific value. Drop type rules cover most cases; use these only for exceptions.'],
+  ['ol', ['Open the Extra rules tab.', 'Click **Add rule**.', 'Choose the field and value that trigger the rule, and the affected field (hide or require).', 'Save and publish a new version.']],
+  ['img', [['12-03-extra-rules.png', 'Extra rules.']]]
+ ]],
+ [2, 'Users, crews & catalogs', [
+  ['h', '13.1 Users'],
+  ['p', '**Settings → Users** lists people with access: name, email, role, status, and join date. Filter by date (Date range) and status (All statuses).'],
+  ['img', [['13-01-usuarios-lista.png', 'User list.'], ['13-02-usuarios-add-user.png', 'Add User modal.']]],
+  ['p', '**To add a user:**'],
+  ['ol', ['Click **Add User**.', 'Enter the **Email**. The sign-in code will be sent there; no password is stored.', 'Enter the name (optional).', 'Choose the **Role**: Admin, Reviewer, Auditor, or Field Technician. What it can do is described below.', 'If it’s a Field Technician, assign their crew.', 'Click **Create**.']],
+  ['p', '**Per-user actions** (icons at the end of each row):'],
+  ['ul', ['**Edit:** change name, role, or crew.', '**Disable:** suspends access without deleting the account or its history.', '**Delete:** removes the account.']],
+  ['note', 'To remove someone’s access, prefer Disable: you keep the record of their reviews.'],
+  ['h', '13.2 Crews'],
+  ['p', 'A crew is the company the technicians belong to; it’s the value shown as Company on reports. **Settings → Crews** shows name, email, state, and last update.'],
+  ['p', '**To create a crew:**'],
+  ['ol', ['Click **New Crew**.', '**Name:** company name (e.g., James Johnson LLC).', '**Email:** crew email. Receives acceptance, rejection, and kickback emails, and is used to sign in to the crew portal.', '**State:** US state where it operates.', 'Check any exceptions that apply (see 13.3).', 'Save.']],
+  ['p', 'On save, the platform generates the **Report URL**: the crew’s public form link. Copy it with the copy icon and share it with the crew’s technicians.'],
+  ['code', 'https://<domain>/<crew-name>/report'],
+  ['p', 'To edit a crew, click the pencil on its row; when done, **Save Changes** or **Cancel**.'],
+  ['img', [['13-03-crews-lista.png', 'Crew list.'], ['13-04-crews-editar-excepciones-y-url.png', 'Edit Crew: exceptions and Report URL.']]],
+  ['h', '13.3 Crew exceptions'],
+  ['t', ['Option', 'Effect'], [['Allow duplicate photos', 'Skips the duplicate-photo check for that crew.'], ['Restrict emails to crew only', 'Acceptance, rejection, and kickback emails go only to the crew email, not the technician.']]],
+  ['warn', 'Apply exceptions only with authorization and document the reason.'],
+  ['h', '13.4 Catalogs'],
+  ['p', '**Settings → Catalogs** manages the lookup lists the system uses: States (51), User statuses, Report statuses, Review actions, Field types, and Permissions. Each list lets you create (**New item**), edit, or delete values.'],
+  ['img', [['13-05-catalogs.png', 'Catalogs.']]],
+  ['warn', 'Seed values are created automatically. Don’t edit or delete them without coordinating with the engineering team: other parts of the system depend on them.']
+ ]],
+ [2, 'Roles & permissions', [
+  ['p', '**Settings → Roles** lists roles with their description, number of permissions, and number of users. System roles (tagged System) can be edited with the pencil, except Crew, which is read-only.'],
+  ['img', [['14-01-roles-lista.png', 'Role list.'], ['14-02-roles-crear-rol.png', 'Create Role.']]],
+  ['p', '**To create a role:**'],
+  ['ol', ['Click **New Role**.', 'Enter the **Name** (e.g., Junior Reviewer) and a **Description** of its responsibility.', 'Check permissions one by one or by group with the group checkbox. **Select all** checks everything and **Clear** unchecks.', 'Click **Create**.', 'Assign the role to people from Settings → Users.']],
+  ['p', 'Users inherit their role’s permissions. There are **37 permissions** in seven groups:'],
+  ['perms'],
+  ['p', '**Permissions worth understanding:**'],
+  ['ul', ['**Review Report** lets you accept or reject; **Edit Report** lets you change fields and photos.', '**Change Status** moves a report to another status outside the normal flow; reserve it for administrators.', '**Bypass Photo Duplicate Check** allows uploading photos the system flags as duplicates.', '**Edit Crew Email In Report** allows changing the technician or crew email and reassigning a report’s crew.', '**View Pending / Accepted / Rejected / Archived Reports** limit which reports the role sees. That’s how Auditor works: it only sees accepted reports.']],
+  ['img', [['14-03-roles-lista-completa-de-permisos.png', 'Full permission list (click to enlarge).', 360]]],
+  ['note', 'Give each person only what they need. A reviewer usually needs View Reports, View Report Details, Review Report, and Edit Report.']
+ ]],
+ [3, 'Submitting a report', [
+  ['p', 'Technicians submit reports from their crew’s public link, without signing in. Ask your crew for the link and bookmark it in your browser.'],
+  ['ol', ['Open your crew’s public link.', 'Review the fields that come pre-filled and locked (e.g., the company). You don’t need to change them.', 'Select the date you did the job.', 'Enter the Call ID, your name or email, and the job address.', 'Select the drop type. The form will show the fields and photos that job type requires.', 'In Notes | Comments, explain any special situation (e.g., the customer didn’t allow access).', 'Upload photos in each field. Before taking them, open the field’s Photo guidelines and reference photo.', 'Wait for the AI validation result. If it flags a problem, retake the photo.', 'Review everything and click **Submit**.']],
+  ['img', [['15-01-formulario-publico.png', 'Form header and first fields.', 360], ['15-02-formulario-publico-completo-bury.png', 'Full public form (Bury).', 360]]],
+  ['h', 'Photo best practices'],
+  ['ul', ['Take each photo where the guideline says, not from the vehicle.', 'Make sure required elements are visible (badge, door hanger, sign).', 'Don’t reuse photos from other jobs or edit them; the system detects duplicates.', 'Upload each photo to its matching field.']]
+ ]],
+ [3, 'Correcting a rejected report', [
+  ['p', 'When a report is rejected, the technician and their crew get an email titled along the lines of “Your report needs attention”. They have **7 days** to correct it.'],
+  ['h', '16.1 Technicians'],
+  ['ol', ['Open the kickback email and check the Call ID, drop type, and submission date to identify the report.', 'Read the reviewer’s comment and the flagged fields.', 'Click the button to edit the report.', 'The form opens with every field locked except the ones that need correction.', 'Fix or re-upload the indicated photos. If needed, go back to the site to take them correctly.', 'Click **Submit**. The report returns to the review queue.']],
+  ['warn', 'If the link expired, the form won’t allow changes. Contact your crew. If you don’t correct it in time, you’ll get a reminder on Fridays at 8:00 a.m. while the report remains rejected.'],
+  ['h', '16.2 Crews'],
+  ['p', 'Crews can sign in to the platform with their email (see [section 3](#s3)) and see their technicians’ reports.'],
+  ['ol', ['Go to Reports and open the report.', 'Edit the fields that need correction. You can do this before the reviewer sends a kickback or when the technician didn’t make the changes.', 'If the report is Rejected and already corrected, change its status to send it back to review.']]
+ ]],
+ [4, 'Glossary & FAQ', [
+  ['h', 'Glossary'],
+  ['t', ['Term', 'Meaning'], [['OTP', 'One-time code emailed to sign in. Expires after 10 minutes.'], ['Crew', 'Company the technicians belong to.'], ['Call ID', 'Job or ticket identifier.'], ['Drop Type', 'Type of job; defines required fields and photos.'], ['Kickback', 'Return of a rejected report, emailed to the technician and crew.'], ['Photo guidelines', 'Instructions for taking a field’s photo.'], ['Pre-edit link', 'Special link to edit a report, included in the Excel export.'], ['Review History', 'Log of every action taken on a report.'], ['Swap', 'Exchanging two images between fields.']]],
+  ['h', 'Frequently asked questions'],
+  ['faq', [['Why can’t I sign in if the code is correct?', 'More than 10 minutes have probably passed. Request a new code.'], ['Can I move a photo that’s in the wrong field?', 'Yes, if you’re a reviewer or crew. Drag it or use Swap to put it in the right field.'], ['Should I reject a photo flagged as “modified”?', 'Not for that reason alone. Most photos with a date/time overlay show up that way. Judge the content.'], ['What happens if the technician doesn’t correct within 7 days?', 'The edit link expires and the report stays Rejected. The crew can correct it from the platform.'], ['Who can see the dashboard?', 'Only administrators or roles with that permission.'], ['What does an auditor see?', 'Only reports with Accepted status, with no option to modify them.']]]
+ ]]
+];
+
+const ES = [
+ [0, 'Introducción', [
+  ['p', 'Drop-Bury Reports es una plataforma web para registrar, revisar y aprobar los reportes de trabajos de cableado (drop, bury, bore, aerial y otros) que realizan los técnicos en campo. Cada reporte reúne los datos del trabajo y la evidencia fotográfica que demuestra que se hizo correctamente.'],
+  ['h', 'El ciclo de un reporte'],
+  ['cards', [['01', 'Envío', 'El técnico llena el **Drop-Bury Field Report** desde el enlace de su crew y hace clic en **Submit report**.'], ['02', 'Cola', 'El reporte llega a **Reports** con estado **Pending Review**.'], ['03', 'Revisión', 'Un reviewer verifica datos y fotos, corrige lo que puede y elige **Accept**, **Reject** o **Skip**.'], ['04', 'Kickback', 'Si se rechaza, técnico y crew reciben un correo con enlace para corregir (vence a los 7 días por defecto).'], ['05', 'Métricas', 'Los aceptados quedan para auditoría y alimentan el **Dashboard**.']]],
+  ['h', 'Cómo usar este manual'],
+  ['cards', [['2–4', 'Todas las personas', 'Roles, acceso y navegación.', '#s2'], ['5–7', 'Reviewers', 'Revisar y decidir sobre reportes.', '#s5'], ['8–14', 'Administradores', 'Dashboard, configuración, formularios, usuarios, roles.', '#s8'], ['15–16', 'Técnicos y crews', 'Enviar y corregir reportes.', '#s15']]],
+  ['note', 'Lo que ves y puedes hacer depende de los permisos de tu rol. Si no encuentras una opción descrita aquí, tu rol no tiene ese permiso.']
+ ]],
+ [0, 'Roles de la plataforma', [
+  ['p', 'La plataforma trae cinco roles de sistema (marcados con la etiqueta **System** en Settings → Roles). Los administradores pueden crear roles adicionales con permisos a la medida (ver [sección 14](#s14)).'],
+  ['t', ['Rol', 'Qué hace', 'Cómo se asigna'], [
+   ['Admin', 'Gestión completa: dashboard, reportes, usuarios, crews, formularios y configuración. No puede eliminar roles ni reportes.', 'Desde Users.'],
+   ['Reviewer', 'Ve, revisa y edita los detalles de los reportes (campos y fotos) durante la revisión. Acepta o rechaza.', 'Desde Users.'],
+   ['Auditor', 'Acceso de solo lectura a reportes y métricas. No modifica nada.', 'Desde Users.'],
+   ['Field Technician', 'Envía reportes desde campo y consulta sus propios envíos. Inicia sesión en la app móvil.', 'Desde Users, indicando su crew.'],
+   ['Crew', 'Acceso al portal de la crew, limitado a los reportes de esa crew. Puede corregir reportes rechazados.', 'Se crea automáticamente al registrar una crew en Settings → Crews. No se edita.']]],
+  ['note', 'El dashboard, las métricas, el cambio manual de estado (Change Status) y el archivo de reportes corresponden a perfiles de administración, no a reviewers.']
+ ]],
+ [0, 'Acceso a la plataforma', [
+  ['p', 'Drop-Bury Reports no usa contraseñas: se ingresa con un código de un solo uso (**OTP**) que llega al correo y vence a los **10 minutos**.'],
+  ['h', 'Para iniciar sesión'],
+  ['ol', ['Abre la dirección web de la plataforma en tu navegador.', 'Escribe el correo electrónico registrado en tu cuenta.', 'Haz clic en **Continue**.', 'Abre tu bandeja de entrada y busca el correo con el código. Revisa también spam o promociones.', 'Regresa a la plataforma, escribe el código y confirma.', 'Entrarás a la vista que corresponde a tu rol. Tu nombre aparece abajo a la izquierda, en el menú lateral.']],
+  ['h', 'Si el código no funciona'],
+  ['ul', ['**Código vencido.** Pasados 10 minutos, el código se rechaza aunque sea correcto. Vuelve a ingresar tu correo para recibir uno nuevo.', '**Código incorrecto.** La plataforma muestra un error y no te deja continuar. Verifica que copiaste todos los caracteres.', '**No llega el correo.** Confirma que escribiste bien tu dirección y que un administrador creó tu cuenta. Si tu usuario fue deshabilitado (Disable), no recibirás códigos.']],
+  ['p', '**Cerrar sesión:** haz clic en tu nombre, abajo a la izquierda, y elige la opción para salir.'],
+  ['note', 'Solicita el código solo cuando vayas a usarlo y usa siempre el más reciente.']
+ ]],
+ [0, 'Navegación general', [
+  ['p', 'Todo se maneja desde el menú lateral izquierdo (**Navigation**). Solo verás las opciones que tu rol permite.'],
+  ['t', ['Menú', 'Para qué sirve'], [
+   ['Dashboard', 'Indicadores y gráficos de la operación (Overview) y desempeño de reviewers (Reviewer performance).'],
+   ['Reports', 'Bandeja de reportes enviados. El número junto al nombre indica cuántos reportes requieren atención.'],
+   ['Settings → General', 'Nombre de la plataforma, notificaciones, vigencia de enlaces y recordatorios de kickback.'],
+   ['Settings → Form Builder', 'Campos del formulario, reglas por drop type y versiones publicadas.'],
+   ['Settings → Users', 'Personas con acceso a la plataforma y su rol.'],
+   ['Settings → Crews', 'Empresas o cuadrillas, sus estados y su enlace público.'],
+   ['Settings → Roles', 'Roles y permisos.'],
+   ['Settings → Catalogs', 'Listas de valores que usa el sistema (estados, estatus, permisos).']]],
+  ['h', 'Elementos comunes'],
+  ['ul', ['**Ocultar menú:** el ícono junto al nombre de la plataforma, arriba a la izquierda, contrae o expande el menú lateral.', '**Tu cuenta:** tu nombre aparece abajo a la izquierda.', '**Tablas:** casi todas tienen búsqueda, filtros, **Clear filters** para quitarlos, **Rows per page** para cambiar cuántas filas ver y flechas de paginación abajo a la derecha.', '**Ordenar:** las columnas con flechas (↑↓) junto al título se pueden ordenar haciendo clic en ellas.']],
+  ['note', 'Usa una versión actualizada de Chrome, Edge, Firefox o Safari, en computadora o laptop. Las herramientas de revisión de fotos están pensadas para mouse o trackpad.']
+ ]],
+ [1, 'Vista de reportes', [
+  ['p', 'La vista **Reports** (“All field submissions”) es la bandeja de trabajo: lista todos los reportes enviados, del más reciente al más antiguo.'],
+  ['img', [['05-01-reports-lista.png', 'Vista Reports con filtros y tabla de envíos.']]],
+  ['h', 'Columnas de la tabla'],
+  ['t', ['Columna', 'Qué muestra'], [['Company', 'Crew a la que pertenece el reporte. Ordenable.'], ['Email', 'Correo del técnico o de la crew que envió el reporte.'], ['Call Id', 'Identificador del trabajo o ticket del cliente.'], ['Drop Type', 'Tipo de trabajo (Bury, Bore, White Line…). Ordenable.'], ['Submitted', 'Fecha de envío. Ordenable.'], ['Status', 'Estado actual del reporte.'], ['Reviews', 'Número de revisiones registradas. En 0, nadie lo ha revisado.']]],
+  ['h', 'Buscar un reporte'],
+  ['ol', ['Haz clic en el buscador (“Search company, email, Call Id…”).', 'Escribe el Call ID, el correo o el nombre de la compañía.', 'La tabla muestra solo los resultados que coinciden.']],
+  ['h', 'Filtrar la lista'],
+  ['p', 'Combina los filtros de la barra superior y usa **Clear filters** para volver a la lista completa.'],
+  ['t', ['Filtro', 'Opciones'], [['Date range', 'Periodo de envío; elige un rango en el calendario y haz clic en Apply.'], ['All statuses', 'Pending Review, Accepted, Rejected, Archived.'], ['All drop types', 'Cualquiera de los tipos de trabajo configurados.'], ['All states', 'Estado de EE. UU. de la dirección del trabajo.'], ['All crews', 'Una crew específica.']]],
+  ['h', 'Estados de un reporte'],
+  ['t', ['Estado', 'Significado', 'Qué sigue'], [['§Pending Review', 'Enviado, pendiente de revisión.', 'Un reviewer debe abrirlo y decidir.'], ['§Accepted', 'El reviewer verificó que el trabajo está correcto.', 'Queda disponible para auditoría y métricas.'], ['§Rejected', 'Tiene errores que debe corregir el técnico o la crew.', 'Se envía un kickback; el reporte espera la corrección.'], ['§Archived', 'Retirado de la operación (por ejemplo, un duplicado).', 'No cuenta en las métricas; solo se ve si se filtra o exporta.']]],
+  ['p', 'Para abrir un reporte, haz clic en cualquier parte de su fila.']
+ ]],
+ [1, 'Revisar un reporte', [
+  ['p', 'Revisar consiste en abrir el reporte, comprobar que cada dato y cada foto corresponden al trabajo, corregir lo que sea posible y decidir si se acepta o se rechaza.'],
+  ['h', '6.1 El panel del reporte'],
+  ['p', 'Al hacer clic en una fila se abre un panel lateral con estas partes:'],
+  ['img', [['06-01-reporte-panel.png', 'Panel del reporte.', 300], ['06-02-reporte-contenido-completo.png', 'Contenido completo: detalles, fotos e historial.', 300]]],
+  ['t', ['Zona', 'Contenido'], [['Barra superior', 'Previous y Next para pasar al reporte anterior o siguiente sin cerrar el panel, y la posición en la lista (por ejemplo, “5 of 15”).'], ['Encabezado', 'Código del reporte (por ejemplo, #41F12CFA), estado, crew, correo y fecha y hora de envío. A la derecha: Export Report, Change Status (según permisos y estado) y el ícono de archivo (Archive report).'], ['Report Details', 'Los datos del formulario: Date, Company Name, Call ID, Technician’s e-mail, Address, Drop Type y los campos propios del drop type (por ejemplo, Total cable length y Notes | Comments). El asterisco (*) marca los obligatorios.'], ['Photo Evidence', 'Las fotos agrupadas por campo, con el total (por ejemplo, “10 photos”).'], ['Review History', 'Registro de todas las acciones sobre el reporte.'], ['Barra inferior', 'Skip, Accept y Reject. Solo aparece en reportes pendientes de revisión.']]],
+  ['h', '6.2 Corregir un dato'],
+  ['p', 'Si el técnico escribió un dato equivocado (por ejemplo, una fecha mal seleccionada):'],
+  ['ol', ['Haz clic en el ícono de lápiz junto al nombre del campo.', 'Escribe o selecciona el valor correcto.', 'Confirma el cambio. Queda registrado en el Review History.']],
+  ['h', '6.3 Herramientas de las fotos'],
+  ['p', 'Cada foto se muestra en una tarjeta con el nombre de su campo debajo y estos controles:'],
+  ['t', ['Control', 'Ubicación', 'Para qué sirve'], [['Ver foto', 'Clic sobre la imagen', 'Abre la foto en grande, con zoom y navegación entre imágenes.'], ['Mover (⇆)', 'Esquina superior izquierda', 'Pasa la foto a otro campo (Move photo to another field).'], ['Comentarios', 'Esquina superior derecha', 'Deja una observación sobre esa foto. Un punto de color indica que ya tiene comentarios.'], ['Eliminar', 'Esquina inferior derecha (ícono rojo)', 'Quita la foto del campo.'], ['Resultado IA', 'Debajo de la foto', 'Resultado de la validación automática; despliégalo para ver el detalle.'], ['Add photo', 'Espacio punteado', 'Agrega una foto a un campo vacío.'], ['Select photos to move', 'Arriba a la derecha de Photo Evidence', 'Selecciona varias fotos y muévelas juntas a otro campo.']]],
+  ['img', [['06-03-visor-de-fotos.png', 'Visor de fotos con comentarios.'], ['06-04-visor-resultado-ia.png', 'Resultado de la IA desplegado.']]],
+  ['p', '**Mensajes de la IA:**'],
+  ['ul', ['**AI: Issues found** — la IA detectó problemas; despliega el mensaje para ver cuáles.', '**AI: agent not available when uploading the photo** — la validación no se ejecutó; revisa la foto manualmente.', '**Sin mensaje de error** — la foto pasó la validación o el campo no tiene validación con IA.']],
+  ['note', '**Ejemplo:** si la foto del vehículo quedó en el campo del door hanger, usa Mover para pasarla al campo correcto. No hace falta rechazar por un error de ubicación que puedes corregir tú.'],
+  ['h', '6.4 Qué verificar en las fotos'],
+  ['p', 'Son motivos frecuentes de rechazo:'],
+  ['ul', ['La foto no se tomó donde indica la guía (por ejemplo, desde el vehículo en lugar de frente a la casa).', 'Falta un elemento requerido: el address tag en el cable, la cinta métrica dentro de la zanja, el gafete del técnico, los conos.', 'La foto está borrosa, oscura o cortada, y no se lee lo que debe leerse.', 'La foto parece retocada o montada, o se reutilizó de otro trabajo.']],
+  ['warn', 'Casi todas las fotos aparecen como “modificadas” en sus metadatos porque los técnicos usan apps que les sobreponen fecha y hora. Esa marca por sí sola no es motivo de rechazo.'],
+  ['h', '6.5 Review History'],
+  ['p', 'Cada acción sobre un reporte (campos editados, fotos movidas, aceptaciones, rechazos, kickbacks) queda registrada con su autor y fecha. El historial no se borra, así que evita hacer cambios de prueba en reportes reales.']
+ ]],
+ [1, 'Aceptar, rechazar, omitir y archivar', [
+  ['p', 'Al terminar la revisión, usa los botones de la barra inferior del panel: **Accept** si todo está correcto (o ya lo corregiste), **Reject** si hay errores que solo el técnico puede resolver, o **Skip** para dejarlo pendiente y pasar al siguiente.'],
+  ['h', '7.1 Aceptar un reporte'],
+  ['ol', ['Confirma que todos los campos y fotos obligatorios son correctos.', 'Haz clic en **Accept** (botón verde).', 'El estado cambia a Accepted.']],
+  ['h', '7.2 Rechazar un reporte (kickback)'],
+  ['p', 'Rechaza cuando falte evidencia o una foto deba repetirse, por ejemplo si el técnico debe volver al sitio.'],
+  ['ol', ['Deja un comentario en cada foto con problema, usando el ícono de comentarios de la tarjeta.', 'Haz clic en **Reject** (botón rojo).', 'Indica el motivo y los campos que deben corregirse, y confirma.', 'La plataforma envía el correo de kickback al técnico y a su crew (o solo a la crew, si tiene activa la opción **Restrict emails to crew only**).']],
+  ['p', 'El correo incluye el Call ID, el drop type, la fecha de envío, el estado, tu comentario, los campos marcados, las fotos enviadas y un botón para editar el reporte. El enlace vence según **Edit Link Expiry** (7 días por defecto).'],
+  ['note', 'Escribe comentarios específicos: “Falta la cinta métrica dentro de la zanja en Buried Depth” funciona mejor que “fotos incorrectas”.'],
+  ['h', '7.3 Omitir (Skip)'],
+  ['p', '**Skip** deja el reporte en Pending Review y te lleva al siguiente. Úsalo si necesitas consultar algo antes de decidir.'],
+  ['h', '7.4 Archivar un reporte'],
+  ['p', 'Archivar retira un reporte de la operación y de las métricas sin borrarlo; se usa, por ejemplo, con duplicados.'],
+  ['ol', ['Abre el reporte.', 'Haz clic en el ícono de archivo (**Archive report**), arriba a la derecha.', 'Confirma. El estado cambia a Archived.']],
+  ['h', '7.5 Cambiar el estado manualmente'],
+  ['p', '**Change Status** permite mover un reporte a otro estado fuera del flujo normal de revisión (por ejemplo, devolver un rechazado a revisión). Solo lo ven los roles con el permiso Change Status.'],
+  ['img', [['07-02-reporte-rechazado-change-status.png', 'Reporte rechazado con el botón Change Status.']]],
+  ['h', '7.6 Descargar un reporte'],
+  ['p', '**Export Report** descarga el reporte abierto en PDF, con sus datos y fotos. Requiere el permiso Export Single Report (PDF).']
+ ]],
+ [2, 'Dashboard y métricas', [
+  ['p', 'El Dashboard muestra el volumen, la calidad y el estado de los reportes. Tiene dos pestañas: **Overview** y **Reviewer performance**. Requiere los permisos View Dashboard y View Metrics.'],
+  ['img', [['08-01-dashboard-overview.png', 'Dashboard, pestaña Overview.']]],
+  ['h', '8.1 Filtros'],
+  ['p', 'Los filtros de la parte superior afectan todos los indicadores y gráficos de la pestaña:'],
+  ['ol', ['Haz clic en el filtro de fecha (por defecto **Last 7 days**).', 'Elige Last 7 days, Last 30 days o marca un rango en el calendario.', 'Haz clic en **Apply**.', 'Si lo necesitas, filtra por crew (All crews) y por estado (All states).', 'Usa **Clear filters** para volver a los valores por defecto.']],
+  ['img', [['08-03-dashboard-filtro-fechas.png', 'Selector de rango de fechas.']]],
+  ['h', '8.2 Overview'],
+  ['p', '**Needs attention** — tres colas de trabajo; **View queue** abre la lista de reportes correspondiente:'],
+  ['t', ['Tarjeta', 'Qué cuenta'], [['Pending Review', 'Reportes en la cola de revisión.'], ['Rejected (Awaiting Edit)', 'Reportes rechazados que la crew aún debe reenviar.'], ['Accepted Today', 'Reportes aceptados desde la medianoche.']]],
+  ['p', '**Period snapshot** — totales del periodo filtrado:'],
+  ['t', ['Indicador', 'Qué mide'], [['Total submissions', 'Reportes enviados en el periodo.'], ['Total accepted', 'Reportes aceptados y su porcentaje.'], ['Rejection rate', 'Porcentaje de reportes rechazados.'], ['Acceptance rate', 'Porcentaje de reportes aceptados.'], ['Awaiting edit', 'Rechazados pendientes de corrección.'], ['Avg review lag', 'Días promedio entre el envío y la primera revisión.'], ['Archived', 'Reportes archivados.']]],
+  ['p', '**Activity and quality** — gráficos del periodo:'],
+  ['ul', ['**Reports Over Time:** envíos diarios frente a aceptados.', '**Top Failing Fields:** los campos que más se señalan en los rechazos.', '**Review Effort (Iterations):** cuántos ciclos de revisión necesita un reporte antes de aceptarse.', '**Avg Days to Submit by Crew:** días promedio que tarda cada crew en enviar.', '**Submitted by State** y **Rejections by State:** volumen y rechazos según el estado de la dirección.']],
+  ['img', [['08-02-dashboard-overview-completo.png', 'Overview completo.', 420]]],
+  ['h', '8.3 Reviewer performance'],
+  ['p', 'Muestra cómo cada persona revisora mueve los reportes. Además de los filtros anteriores, tiene **All reviewers** y un selector de agrupación (por ejemplo, **By week**).'],
+  ['ul', ['**Indicadores:** Total actions, Reports touched, Active / total reviewers y Avg actions / report.', '**Tabla por reviewer:** Accepted, Rejected, Edited, Total y Reports.', '**Actions by crew:** acciones de revisión por crew.', '**Trend:** evolución de aceptaciones (A), rechazos (R) y ediciones (E) en el tiempo.']],
+  ['img', [['08-04-dashboard-reviewer-performance.png', 'Reviewer performance.'], ['08-05-dashboard-reviewer-performance-completo.png', 'Tabla, acciones por crew y tendencia.']]],
+  ['note', 'Los reportes archivados no se cuentan en las métricas de operación.']
+ ]],
+ [2, 'Exportar datos', [
+  ['p', 'El botón **Export**, arriba a la derecha del Dashboard, descarga los reportes (Tickets) del periodo y los filtros activos en tres formatos.'],
+  ['t', ['Opción', 'Qué contiene', 'Uso recomendado'], [['Export CSV', 'Los datos de los reportes en texto separado por comas.', 'Importar a otros sistemas o análisis propios.'], ['Export Excel', 'Los datos en .xlsx, con un **Pre-edit link** por reporte: un enlace especial para editarlo, distinto al del técnico.', 'Trabajo administrativo y seguimiento de correcciones.'], ['Export as PDF', 'Los indicadores y gráficos del dashboard.', 'Presentar resultados o compartir un resumen. Requiere Export Metrics PDF.']]],
+  ['h', 'Para exportar'],
+  ['ol', ['En Dashboard, aplica los filtros que quieras reflejar (periodo, crew, estado).', 'Haz clic en **Export**.', 'Elige Export CSV, Export Excel o Export as PDF.', 'Si la plataforma lo pregunta, indica si quieres incluir los reportes archivados.', 'El archivo se descarga en tu equipo.']],
+  ['img', [['09-01-dashboard-menu-export.png', 'Menú Export.']]],
+  ['p', 'Para descargar un solo reporte, ábrelo y usa **Export Report** (ver [7.6](#s7)).'],
+  ['warn', 'El Pre-edit link permite modificar reportes. Compártelo solo con personas autorizadas.']
+ ]],
+ [2, 'Configuración general', [
+  ['p', 'En **Settings → General** se definen el nombre de la plataforma, las notificaciones, la vigencia de los enlaces de edición y los recordatorios de kickback. Los cambios se aplican al hacer clic en **Save**, arriba a la derecha.'],
+  ['img', [['10-02-settings-general-completo.png', 'Settings → General.']]],
+  ['t', ['Opción', 'Qué controla'], [['Platform Name', 'Nombre que aparece en la interfaz, en los correos y en el encabezado del formulario público.'], ['Review Timeline Message', 'Mensaje del correo de confirmación que indica cuándo se revisará el reporte (por ejemplo, “Your report will be reviewed within 1-2 business days.”).'], ['Notification Recipients', 'Correos que reciben un aviso cada vez que se envía un reporte nuevo.'], ['Edit Link Expiry (days)', 'Días que el enlace de edición de un reporte rechazado permanece activo. Por defecto, 7.'], ['Kickback Reminder Schedule', 'Día de la semana, hora y zona horaria del recordatorio automático. Por defecto, viernes 8:00 a.m. (UTC).'], ['Send kickbacks manually', 'Envía el recordatorio de inmediato. Pide confirmación antes de enviar.']]],
+  ['h', 'Para cambiar una opción'],
+  ['ol', ['Entra a Settings → General.', 'Edita el campo.', 'Haz clic en **Save**.']],
+  ['h', 'Para enviar el recordatorio de kickback ahora'],
+  ['ol', ['Ve a la sección **Send kickbacks manually**.', 'Haz clic en el botón de envío.', 'Confirma. El correo llega a todos los técnicos con reportes rechazados cuyo enlace de edición sigue activo.']],
+  ['note', 'Los recordatorios, automáticos o manuales, solo se envían a reportes rechazados con el enlace de edición vigente. La zona horaria por defecto es UTC: ajústala si quieres que el envío coincida con la hora local de las crews.']
+ ]],
+ [2, 'Form Builder', [
+  ['p', 'El Form Builder define el formulario que llenan los técnicos (“Drop-Bury Field Report”). Los cambios no llegan al formulario público hasta que publicas una versión nueva con **Publish version**.'],
+  ['img', [['11-01-form-builder-campos.png', 'Form Builder, pestaña Fields.']]],
+  ['h', '11.1 La pantalla'],
+  ['t', ['Elemento', 'Para qué sirve'], [['Form name', 'Título del formulario que verán los técnicos.'], ['Contador y versión', 'Número de campos y versión publicada (por ejemplo, “29 fields · Live · v34”).'], ['Preview', 'Muestra el formulario como lo verá el técnico.'], ['Publish version', 'Publica los cambios como una versión nueva.'], ['Pestañas', 'Fields (campos), Drop type rules (reglas por tipo de trabajo) y Extra rules (reglas condicionales).'], ['Version history', 'Lista de versiones a la derecha. La vigente tiene la etiqueta **Live**; las anteriores, **Archived**, y se conservan como registro.']]],
+  ['h', '11.2 Agregar un campo'],
+  ['ol', ['En la pestaña Fields, ve a **Add a field**.', 'Haz clic en el tipo: Text, Email, Date, Number, Long text, Dropdown, Photo o Address.', 'El campo se agrega a la lista. Haz clic en su tarjeta para abrir la configuración.', 'Completa los datos (ver 11.3 y 11.4).', 'Para cambiar el orden, arrastra la tarjeta desde el ícono de puntos a la izquierda del número.', 'Cuando el formulario esté listo, revisa con **Preview** y haz clic en **Publish version**.']],
+  ['p', 'Cada tarjeta muestra etiquetas con su tipo, **Required** si es obligatorio y **AI** si tiene validación con IA.'],
+  ['h', '11.3 Configuración de cualquier campo'],
+  ['t', ['Sección', 'Opción', 'Qué define'], [['Details', 'Label', 'Nombre del campo que ve el técnico.'], ['Details', 'Type', 'Tipo de campo.'], ['Details', 'Width', 'Ancho en el formulario (por ejemplo, Full row).'], ['Details', 'Placeholder', 'Texto de ejemplo dentro del campo vacío.'], ['Details', 'Helper text', 'Indicación breve que aparece junto al campo.'], ['Behavior', 'Required', 'La crew debe completar el campo para enviar.'], ['Behavior', 'Visible', 'El campo se muestra en el formulario público.'], ['Behavior', 'Always visible', 'El campo se muestra siempre, aunque una regla de drop type lo oculte.'], ['Behavior', 'AI validation', 'La foto se evalúa contra un prompt (solo campos Photo).']]],
+  ['p', 'Para eliminar un campo, abre su tarjeta y haz clic en **Remove field**.'],
+  ['h', '11.4 Configuración de un campo de foto'],
+  ['p', 'Los campos Photo tienen además la sección **Photos**:'],
+  ['t', ['Opción', 'Qué define'], [['Max photos', 'Número máximo de imágenes del campo.'], ['Accepted formats', 'JPG, PNG, WEBP, GIF y HEIC. Deja todos marcados para aceptarlos todos.'], ['Photo guidelines', 'Instrucciones para el técnico: qué debe aparecer y cómo tomar la foto.'], ['Reference photo', 'Foto de ejemplo que se muestra cuando una foto no pasa la validación con IA. Remove reference la quita.'], ['AI validation prompt', 'Qué debe comprobar la IA en la foto y cuándo rechazarla.']]],
+  ['img', [['11-02-form-builder-configuracion-campo-foto.png', 'Configuración del campo Address Tag.']]],
+  ['p', '**Ejemplo (Address Tag):** el prompt pide identificar una etiqueta de dirección sujeta al cable, con luz suficiente y foco nítido, y rechazar la foto si la etiqueta falta, está borrosa o no está conectada al cable.'],
+  ['note', 'Escribe las Photo guidelines y el AI validation prompt con los mismos criterios. Si el técnico sabe qué revisa la IA, habrá menos rechazos.']
+ ]],
+ [2, 'Drop type rules y Extra rules', [
+  ['p', 'Un **drop type** es el tipo de trabajo que realizó el técnico. Todas las crews usan el mismo formulario; lo que cambia según el drop type es qué campos se muestran y cuáles son obligatorios.'],
+  ['p', 'Drop types configurados en staging:'],
+  ['chips', DROP_TYPES],
+  ['h', '12.1 Configurar un drop type'],
+  ['ol', ['Entra a Settings → Form Builder y abre la pestaña **Drop type rules**.', 'Cada drop type muestra un resumen, por ejemplo “6 hidden · 2 extra required”: campos ocultos y campos que pasan a ser obligatorios solo para ese tipo.', 'Haz clic en el drop type para desplegar sus campos.', 'En cada campo, activa o desactiva **Visible** y **Required**.', 'Revisa el resultado con **Preview**, eligiendo ese drop type en el formulario.', 'Haz clic en **Publish version** para aplicar los cambios.']],
+  ['img', [['12-01-drop-type-rules.png', 'Lista de drop types.', 320], ['12-02-drop-type-rules-bury-completo.png', 'Reglas del drop type Bury.', 320]]],
+  ['note', 'Un campo marcado como Always visible en su configuración se muestra aunque la regla del drop type lo oculte.'],
+  ['h', '12.2 Extra rules'],
+  ['p', 'La pestaña **Extra rules** crea reglas condicionales: ocultar o volver obligatorio un campo cuando otra respuesta tiene un valor determinado. Las reglas por drop type cubren la mayoría de los casos; usa estas solo para excepciones.'],
+  ['ol', ['Abre la pestaña Extra rules.', 'Haz clic en **Add rule**.', 'Elige el campo y el valor que activan la regla, y el campo afectado (ocultar o requerir).', 'Guarda y publica una versión nueva.']],
+  ['img', [['12-03-extra-rules.png', 'Extra rules.']]]
+ ]],
+ [2, 'Usuarios, crews y catálogos', [
+  ['h', '13.1 Usuarios'],
+  ['p', '**Settings → Users** lista a las personas con acceso: nombre, correo, rol, estado y fecha de alta. Se puede filtrar por fecha (Date range) y por estado (All statuses).'],
+  ['img', [['13-01-usuarios-lista.png', 'Lista de usuarios.'], ['13-02-usuarios-add-user.png', 'Modal Add User.']]],
+  ['p', '**Para agregar un usuario:**'],
+  ['ol', ['Haz clic en **Add User**.', 'Escribe el **Email**. A esa dirección le llegará el código de acceso; no se guarda contraseña.', 'Escribe el nombre (opcional).', 'Elige el **Role**: Admin, Reviewer, Auditor o Field Technician. Debajo se describe qué puede hacer.', 'Si es Field Technician, asigna su crew.', 'Haz clic en **Create**.']],
+  ['p', '**Acciones por usuario** (íconos al final de cada fila):'],
+  ['ul', ['**Edit:** cambia nombre, rol o crew.', '**Disable:** suspende el acceso sin borrar la cuenta ni su historial.', '**Delete:** elimina la cuenta.']],
+  ['note', 'Para retirar el acceso a alguien, prefiere Disable: conservas el registro de sus revisiones.'],
+  ['h', '13.2 Crews'],
+  ['p', 'Una crew es la empresa o cuadrilla a la que pertenecen los técnicos; es el valor que aparece como Company en los reportes. **Settings → Crews** muestra nombre, correo, estado y fecha de actualización.'],
+  ['p', '**Para crear una crew:**'],
+  ['ol', ['Haz clic en **New Crew**.', '**Name:** nombre de la empresa (por ejemplo, James Johnson LLC).', '**Email:** correo de la crew. Recibe los correos de aceptación, rechazo y kickback, y sirve para iniciar sesión en el portal de la crew.', '**State:** estado de EE. UU. donde opera.', 'Marca las excepciones que apliquen (ver 13.3).', 'Guarda.']],
+  ['p', 'Al guardar, la plataforma genera el **Report URL**: el enlace público del formulario para esa crew. Cópialo con el ícono de copiar y compártelo con los técnicos de la crew.'],
+  ['code', 'https://<dominio>/<nombre-de-la-crew>/report'],
+  ['p', 'Para editar una crew, haz clic en el lápiz de su fila; al terminar, **Save Changes** o **Cancel**.'],
+  ['img', [['13-03-crews-lista.png', 'Lista de crews.'], ['13-04-crews-editar-excepciones-y-url.png', 'Edit Crew: excepciones y Report URL.']]],
+  ['h', '13.3 Excepciones por crew'],
+  ['t', ['Opción', 'Efecto'], [['Allow duplicate photos', 'Omite el control de fotos duplicadas para esa crew.'], ['Restrict emails to crew only', 'Los correos de aceptación, rechazo y kickback llegan solo al correo de la crew, no al técnico.']]],
+  ['warn', 'Aplica las excepciones solo con autorización y documenta el motivo.'],
+  ['h', '13.4 Catalogs'],
+  ['p', '**Settings → Catalogs** administra las listas de valores que usa el sistema: States (51), User statuses, Report statuses, Review actions, Field types y Permissions. Cada lista permite crear (**New item**), editar o eliminar valores.'],
+  ['img', [['13-05-catalogs.png', 'Catalogs.']]],
+  ['warn', 'Los valores base se crean automáticamente. No los edites ni los borres sin coordinarlo con el equipo técnico: otras partes del sistema dependen de ellos.']
+ ]],
+ [2, 'Roles y permisos', [
+  ['p', '**Settings → Roles** lista los roles con su descripción, número de permisos y número de usuarios. Los roles de sistema (etiqueta System) se pueden editar con el lápiz, excepto Crew, que es de solo lectura.'],
+  ['img', [['14-01-roles-lista.png', 'Lista de roles.'], ['14-02-roles-crear-rol.png', 'Create Role.']]],
+  ['p', '**Para crear un rol:**'],
+  ['ol', ['Haz clic en **New Role**.', 'Escribe el **Name** (por ejemplo, Junior Reviewer) y una **Description** de su responsabilidad.', 'Marca los permisos, uno por uno o por grupo con la casilla del grupo. **Select all** marca todos y **Clear** los desmarca.', 'Haz clic en **Create**.', 'Asigna el rol a las personas desde Settings → Users.']],
+  ['p', 'Los usuarios heredan los permisos de su rol. Hay **37 permisos** en siete grupos:'],
+  ['perms'],
+  ['p', '**Permisos que conviene entender bien:**'],
+  ['ul', ['**Review Report** permite aceptar o rechazar; **Edit Report**, modificar campos y fotos.', '**Change Status** mueve un reporte a otro estado fuera del flujo normal; resérvalo para administradores.', '**Bypass Photo Duplicate Check** permite subir fotos que el sistema detecta como duplicadas.', '**Edit Crew Email In Report** permite cambiar el correo del técnico o de la crew y reasignar la crew de un reporte.', '**View Pending / Accepted / Rejected / Archived Reports** limitan qué reportes ve el rol. Así funciona el Auditor, que solo ve reportes aceptados.']],
+  ['img', [['14-03-roles-lista-completa-de-permisos.png', 'Lista completa de permisos (clic para ampliar).', 360]]],
+  ['note', 'Asigna a cada persona solo lo que necesita. Un reviewer suele necesitar View Reports, View Report Details, Review Report y Edit Report.']
+ ]],
+ [3, 'Enviar un reporte', [
+  ['p', 'Los técnicos envían sus reportes desde el enlace público de su crew, sin iniciar sesión. Pide ese enlace a tu crew y guárdalo en los favoritos de tu navegador.'],
+  ['ol', ['Abre el enlace público de tu crew.', 'Revisa los campos que ya vienen llenos y bloqueados (por ejemplo, la compañía). No necesitas modificarlos.', 'Selecciona la fecha en que realizaste el trabajo.', 'Escribe el Call ID, tu nombre o correo y la dirección del trabajo.', 'Selecciona el drop type. El formulario mostrará los campos y fotos que exige ese tipo de trabajo.', 'En Notas y comentarios, explica cualquier situación especial (por ejemplo, el cliente no permitió el acceso).', 'Sube las fotos en cada campo. Antes de tomarlas, abre las Photo guidelines y la foto de referencia del campo.', 'Espera el resultado de la validación con IA. Si indica un problema, toma la foto de nuevo.', 'Revisa todo y haz clic en **Submit**.']],
+  ['img', [['15-01-formulario-publico.png', 'Encabezado y primeros campos del formulario.', 360], ['15-02-formulario-publico-completo-bury.png', 'Formulario público completo (Bury).', 360]]],
+  ['h', 'Buenas prácticas para las fotos'],
+  ['ul', ['Toma cada foto en el lugar que indica la guía, no desde el vehículo.', 'Asegúrate de que se vean los elementos requeridos (identificación, door hanger, cartel).', 'No reutilices fotos de otros trabajos ni las edites; el sistema detecta duplicados.', 'Sube cada foto en el campo que le corresponde.']]
+ ]],
+ [3, 'Corregir un reporte rechazado', [
+  ['p', 'Cuando un reporte se rechaza, el técnico y su crew reciben un correo titulado como “Tu reporte necesita atención”. Tienen **7 días** para corregirlo.'],
+  ['h', '16.1 Técnicos'],
+  ['ol', ['Abre el correo de kickback y revisa el Call ID, el drop type y la fecha de envío para identificar el reporte.', 'Lee el comentario del reviewer y los campos marcados con problemas.', 'Haz clic en el botón para editar el reporte.', 'El formulario se abre con todos los campos bloqueados, excepto los que deben corregirse.', 'Corrige o vuelve a subir las fotos indicadas. Si hace falta, regresa al sitio para tomarlas correctamente.', 'Haz clic en **Submit**. El reporte vuelve a la cola de revisión.']],
+  ['warn', 'Si el enlace venció, el formulario no permitirá cambios. Comunícate con tu crew. Si no corriges a tiempo, recibirás un recordatorio los viernes a las 8:00 a.m. mientras el reporte siga rechazado.'],
+  ['h', '16.2 Crews'],
+  ['p', 'Las crews pueden iniciar sesión en la plataforma con su correo (ver [sección 3](#s3)) y ver los reportes de sus técnicos.'],
+  ['ol', ['Entra a Reports y abre el reporte.', 'Edita los campos que necesiten corrección. Puedes hacerlo antes de que el reviewer envíe un kickback o cuando el técnico no hizo los cambios.', 'Si el reporte está en Rejected y ya quedó corregido, cambia su estado para devolverlo a revisión.']]
+ ]],
+ [4, 'Glosario y preguntas frecuentes', [
+  ['h', 'Glosario'],
+  ['t', ['Término', 'Significado'], [['OTP', 'Código de un solo uso enviado al correo para iniciar sesión. Vence a los 10 minutos.'], ['Crew', 'Empresa o cuadrilla a la que pertenecen los técnicos.'], ['Call ID', 'Identificador del trabajo o ticket.'], ['Drop Type', 'Tipo de trabajo; define los campos y fotos requeridos.'], ['Kickback', 'Devolución de un reporte rechazado, enviada por correo al técnico y su crew.'], ['Photo guidelines', 'Instrucciones para tomar la foto de un campo.'], ['Pre-edit link', 'Enlace especial para editar un reporte, incluido en la exportación a Excel.'], ['Review History', 'Registro de todas las acciones realizadas sobre un reporte.'], ['Swap', 'Intercambio de dos imágenes entre campos.']]],
+  ['h', 'Preguntas frecuentes'],
+  ['faq', [['¿Por qué no puedo entrar si el código es correcto?', 'Probablemente pasaron más de 10 minutos. Solicita un código nuevo.'], ['¿Puedo cambiar una foto que está en el campo equivocado?', 'Sí, si eres reviewer o crew. Arrástrala o usa Swap para pasarla al campo correcto.'], ['¿Debo rechazar una foto marcada como “modificada”?', 'No por esa sola razón. La mayoría de fotos con fecha y hora sobrepuestas aparecen así. Evalúa su contenido.'], ['¿Qué pasa si el técnico no corrige en 7 días?', 'El enlace de edición vence y el reporte sigue en Rejected. La crew puede corregirlo desde la plataforma.'], ['¿Quién puede ver el dashboard?', 'Solo administradores o roles con ese permiso.'], ['¿Qué ve un auditor?', 'Solo los reportes en estado Accepted, sin opción de modificarlos.']]]
+ ]]
+];
+
+const BADGES = {
+  'Pending Review': { background: '#fef3c7', color: '#b45309' },
+  'Accepted': { background: '#dcfce7', color: '#15803d' },
+  'Rejected': { background: '#fee2e2', color: '#dc2626' },
+  'Archived': { background: '#f1f5f9', color: '#475569' }
+};
+
+function segs(text) {
+  const out = [];
+  const re = /\*\*(.+?)\*\*|\[(.+?)\]\((.+?)\)/g;
+  let last = 0, m;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push({ t: text.slice(last, m.index), n: true });
+    if (m[1]) out.push({ t: m[1], b: true }); else out.push({ t: m[2], l: true, href: m[3] });
+    last = re.lastIndex;
+  }
+  if (last < text.length) out.push({ t: text.slice(last), n: true });
+  return out;
+}
+
+class Component extends DCLogic {
+  state = { active: 1, lang: 'en', query: '', menuOpen: false, lightbox: null, open: {}, w: typeof window === 'undefined' ? 1400 : window.innerWidth };
+
+  componentDidMount() {
+    try { const l = localStorage.getItem('dbr-docs-lang'); if (l === 'es' || l === 'en') this.setState({ lang: l }); } catch (e) {}
+    this.onScroll = () => {
+      let a = 1;
+      for (let i = 1; i <= 17; i++) { const el = document.getElementById('s' + i); if (el && el.getBoundingClientRect().top < 160) a = i; }
+      if (a !== this.state.active) this.setState({ active: a });
+    };
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onKey = e => { if (e.key === 'Escape' && this.state.lightbox) this.setState({ lightbox: null }); };
+    window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+    this.onScroll();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll, { capture: true });
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+  }
+  setLang(l) { this.setState({ lang: l }); try { localStorage.setItem('dbr-docs-lang', l); } catch (e) {} }
+
+  buildBlock(b, si, bi) {
+    const [k, a, c] = b;
+    const o = { key: si + '-' + bi };
+    if (k === 'p') return { ...o, isP: true, segs: segs(a) };
+    if (k === 'h') return { ...o, isH: true, text: a };
+    if (k === 'ol') return { ...o, isOl: true, items: a.map((t, i) => ({ n: i + 1, segs: segs(t) })) };
+    if (k === 'ul') return { ...o, isUl: true, items: a.map(t => ({ segs: segs(t) })) };
+    if (k === 't') return { ...o, isT: true, head: a, rows: c.map(r => ({ cells: r.map((t, ci) => {
+      if (t[0] === '§') { const v = t.slice(1); return { isBadge: true, t: v, badge: { ...BADGES[v], padding: '2px 10px', borderRadius: 999, fontSize: 13, fontWeight: 500, whiteSpace: 'nowrap' } }; }
+      if (ci === 0) return { isFirst: true, t };
+      return { isText: true, segs: segs(t) };
+    }) })) };
+    if (k === 'note') return { ...o, isNote: true, segs: segs(a) };
+    if (k === 'warn') return { ...o, isWarn: true, segs: segs(a) };
+    if (k === 'img') return { ...o, isImg: true, imgs: a.map(([src, cap, h]) => ({ src: IMG + src, cap, style: { width: '100%', display: 'block', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, cursor: 'zoom-in', ...(h ? { height: h, objectFit: 'cover', objectPosition: 'top' } : {}) } })) };
+    if (k === 'cards') return { ...o, isCards: true, cards: a.map(([kk, title, text, href]) => ({ k: kk, title, segs: segs(text), href: href || '#s' + (si + 1) })) };
+    if (k === 'chips') return { ...o, isChips: true, chips: a };
+    if (k === 'code') return { ...o, isCode: true, text: a };
+    if (k === 'perms') return { ...o, isPerms: true, groups: PERMS.map(([name, perms]) => ({ name, perms, count: perms.length })) };
+    if (k === 'faq') return { ...o, isFaq: true, faqs: a.map(([q, ans], i) => {
+      const id = si + '-' + i, open = !!this.state.open[id];
+      return { q, a: ans, open, sign: open ? '−' : '+', toggle: () => this.setState(s => ({ open: { ...s.open, [id]: !s.open[id] } })) };
+    }) };
+    return o;
+  }
+
+  renderVals() {
+    const { lang, active, query, menuOpen, w, lightbox } = this.state;
+    const ui = UI[lang];
+    const data = lang === 'es' ? ES : EN;
+    const narrow = w < 960;
+    const q = query.trim().toLowerCase();
+    const groups = ui.groups.map((title, gi) => ({
+      title,
+      dot: { width: 8, height: 8, borderRadius: 3, background: GROUP_COLORS[gi], flex: 'none' },
+      items: data.map((s, i) => ({ s, n: i + 1 })).filter(x => x.s[0] === gi && (!q || x.s[1].toLowerCase().includes(q))).map(({ s, n }) => {
+        const on = n === active;
+        return {
+          href: '#s' + n, label: s[1], num: String(n).padStart(2, '0'),
+          onClick: () => this.setState({ active: n, menuOpen: false }),
+          style: { display: 'flex', alignItems: 'center', gap: 10, padding: '7px 10px', marginLeft: 16, borderRadius: 8, fontSize: 14, textDecoration: 'none', background: on ? '#eef3ff' : 'transparent', color: on ? '#1859f1' : '#475569', fontWeight: on ? 500 : 400 }
+        };
+      })
+    })).filter(g => g.items.length);
+    const seg = on => ({ height: 28, padding: '0 12px', border: 0, borderRadius: 7, cursor: 'pointer', font: '500 13px Geist,sans-serif', background: on ? '#fff' : 'transparent', color: on ? '#0f172a' : '#64748b', boxShadow: on ? '0 1px 2px rgba(15,23,42,.1)' : 'none' });
+    return {
+      ui, narrow, wide: !narrow, query,
+      onQuery: e => this.setState({ query: e.target.value }),
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      setEn: () => this.setLang('en'), setEs: () => this.setLang('es'),
+      enStyle: seg(lang === 'en'), esStyle: seg(lang === 'es'),
+      showNav: !narrow || menuOpen,
+      navStyle: narrow
+        ? { position: 'fixed', top: 64, left: 0, right: 0, bottom: 0, zIndex: 25, background: '#fff', overflow: 'auto', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 20 }
+        : { flex: 'none', width: 260, position: 'sticky', top: 64, maxHeight: 'calc(100vh - 64px)', overflow: 'auto', padding: '40px 0 40px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 22 },
+      groups, noResults: groups.length === 0,
+      sections: data.map(([gi, title, blocks], i) => ({
+        id: 's' + (i + 1), href: '#s' + (i + 1), num: String(i + 1).padStart(2, '0'),
+        label: String(i + 1).padStart(2, '0') + ' ' + title, group: ui.groups[gi], title,
+        blocks: blocks.map((b, bi) => this.buildBlock(b, i, bi))
+      })),
+      shots: true,
+      openImg: e => this.setState({ lightbox: e.currentTarget.getAttribute('src') }),
+      closeImg: () => this.setState({ lightbox: null }),
+      hasLightbox: !!lightbox, lightbox: lightbox || ''
+    };
+  }
+}
+</script>
+</body>
+</html>
